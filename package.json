@@ -1,0 +1,26 @@
+{
+  "name": "react-native-example-viewer",
+  "version": "0.0.2",
+  "description": "Component example viewer for React Native",
+  "main": "example-viewer.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/almost/react-native-example-viewer"
+  },
+  "keywords": [
+    "reactnative",
+    "react-native"
+  ],
+  "author": "Thomas Parslow",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/almost/react-native-example-viewer/issues"
+  },
+  "homepage": "https://github.com/almost/react-native-example-viewer",
+  "peerDependencies": {
+    "react-native": "^0.34.1"
+  }
+}
