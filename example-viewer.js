@@ -17,7 +17,7 @@ class ShowExample extends React.Component {
   }
 
   render () {
-    const {story} = this.props;
+    const { story, embiggen } = this.props;
     const presets = this._getPresets();
     const makeAction = (type, extra) => (...args) => {
       this.setState(({storyState, actionLog}) => {
@@ -31,22 +31,26 @@ class ShowExample extends React.Component {
 
     return (
         <View style={styles.container}>
-          <Picker
-           style={{minHeight: 100}}
-           selectedValue={this.state.currentPreset}
-           onValueChange={currentPreset => this.setState({currentPreset, storyState: presets[currentPreset] })}>
-            { Object.keys(presets).map(preset => {
-              return <Picker.Item key={preset} label={preset} value={preset}/>;
-            })}
-          </Picker>
+          {(!embiggen) && (
+              <Picker
+               style={{minHeight: 100}}
+               selectedValue={this.state.currentPreset}
+               onValueChange={currentPreset => this.setState({currentPreset, storyState: presets[currentPreset] })}>
+                 { Object.keys(presets).map(preset => {
+                   return <Picker.Item key={preset} label={preset} value={preset}/>;
+                 })}
+              </Picker>
+          )}
           {story.render(this.state.storyState, makeAction)}
-          <ScrollView style={styles.actionLog}>
-            { this.state.actionLog.map(([date, action] ,i) => (
-              <TouchableOpacity key={i} onPress={() => Alert.alert(action.type, JSON.stringify(action))}>
-                <Text><Text style={styles.actionLogTS}>{date}:</Text><Text> {action.type}</Text></Text>
-              </TouchableOpacity>
-            ))}
-          </ScrollView>
+          {(!embiggen) && (
+              <ScrollView style={styles.actionLog}>
+                { this.state.actionLog.map(([date, action] ,i) => (
+                  <TouchableOpacity key={i} onPress={() => Alert.alert(action.type, JSON.stringify(action))}>
+                    <Text><Text style={styles.actionLogTS}>{date}:</Text><Text> {action.type}</Text></Text>
+                  </TouchableOpacity>
+                ))}
+              </ScrollView>
+          )}
         </View>
     );
   }
@@ -66,7 +70,7 @@ class ExampleList extends React.Component {
         </ScrollView>
       )
     } else {
-      return <ShowExample story={route.story}/>
+      return <ShowExample story={route.story} embiggen={this.props.embiggen}/>
     }
   }
 
@@ -75,10 +79,10 @@ class ExampleList extends React.Component {
       <Navigator
         initialRoute={{name: 'Examples', story: null}}
         renderScene={this._renderScene.bind(this)}
-        navigationBar={<Navigator.NavigationBar routeMapper={{
+        navigationBar={(!this.props.embiggen) && <Navigator.NavigationBar routeMapper={{
           Title: route => <Text>{route.name}</Text>,
           LeftButton: (route, navigator) => (route.story) && <TouchableOpacity onPress={() => navigator.pop()}><Text style={styles.back}>Back</Text></TouchableOpacity>,
-          RightButton: route => null
+          RightButton: (route, navigator) => (route.story) && <TouchableOpacity onPress={this.props.onToggleEmbiggen}><Text style={styles.embiggen}>+</Text></TouchableOpacity>,
         }}/>}
       />
     );
@@ -89,7 +93,7 @@ class ExampleList extends React.Component {
 class ExampleViewer extends React.Component {
   constructor () {
     super();
-    this.state = {showApp: false};
+    this.state = {showApp: false, embiggen: false};
   }
 
   render () {
@@ -102,10 +106,10 @@ class ExampleViewer extends React.Component {
     return (
       <View style={styles.container}>
         <StatusBar hidden={true}/>
-        <TouchableOpacity onPress={() => this.setState({showApp: true})} style={styles.statusBar}>
-          <Text style={styles.statusBarText}>Open App</Text>
+        <TouchableOpacity onPress={() => this.state.embiggen ? this.setState({embiggen: false}) : this.setState({showApp: true})} style={styles.statusBar}>
+          <Text style={styles.statusBarText}>{this.state.embiggen ? 'Back' : 'Open App' }</Text>
         </TouchableOpacity>
-        <ExampleList examples={examples} style={styles.container}/>
+        <ExampleList examples={examples} style={styles.container} embiggen={this.state.embiggen} onToggleEmbiggen={() => this.setState({embiggen: !this.state.embiggen})}/>
       </View>
     );
   }
@@ -151,6 +155,9 @@ const styles = StyleSheet.create({
   },
   back: {
     paddingLeft: 10,
+  },
+  embiggen: {
+    paddingRight: 10,
   },
 });
 

@@ -1,6 +1,6 @@
 {
   "name": "react-native-example-viewer",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "Component example viewer for React Native",
   "main": "example-viewer.js",
   "scripts": {
