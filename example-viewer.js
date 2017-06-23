@@ -1,5 +1,6 @@
 import React from 'react';
-import { ScrollView, View, Picker, Text, Navigator, TouchableOpacity, StyleSheet, Alert, AsyncStorage, StatusBar } from 'react-native';
+import { ScrollView, View, Picker, Text, TouchableOpacity, StyleSheet, Alert, AsyncStorage, StatusBar } from 'react-native';
+import { Navigator } from 'react-native-deprecated-custom-components';
 
 class ShowExample extends React.Component {
   constructor () {

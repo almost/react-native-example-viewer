@@ -21,6 +21,9 @@
   },
   "homepage": "https://github.com/almost/react-native-example-viewer",
   "peerDependencies": {
-    "react-native": "^0.34.1"
+    "react-native": "^0.45.1"
+  },
+  "dependencies": {
+    "react-native-deprecated-custom-components": "^0.1.0"
   }
 }
